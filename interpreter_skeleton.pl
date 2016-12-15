@@ -4,6 +4,8 @@ Peter Idestam-Almquist, 2015-12-09.
 ***/
 
 :- [tokenizer].
+:- [parser].
+:- [evaluator].
 
 /***
 Example call of the top level predicate run/2:
