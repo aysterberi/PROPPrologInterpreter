@@ -1,4 +1,14 @@
 /***
+	Modifications by:
+	Joakim Berglund(jobe7147), joakimberglund@live.se
+	Billy Jaime Beltran(bibe1744), billy@caudimordax.org
+
+	The evaluator was not finished because of lack of time,
+	and has therefore been commented
+***/
+
+
+/***
 A skeleton for Assignment 3 on PROP HT2016 at DSV/SU.
 Peter Idestam-Almquist, 2016-12-15.
 ***/
@@ -10,7 +20,7 @@ Peter Idestam-Almquist, 2016-12-15.
 run(InputFile,OutputFile):-
 	tokenize(InputFile,Program),
 	parse(ParseTree,Program,[]),
-	/*evaluate(ParseTree,[],VariablesOut), */
+	/*evaluate(ParseTree,[],VariablesOut),*/
 	output_result(OutputFile,ParseTree,VariablesOut).
 
 /***
@@ -92,20 +102,37 @@ parse(-ParseTree)-->
 	and returning a parse tree.
 ***/
 
+/*** to begin the parsing you need to be able to call it ***/
 parse(ParseTree) --> 
     block(ParseTree).
 
+/*** 
+	Parses a block
+	block = '{' , stmts , '}' ;
+***/
 block(block(LeftCurly, Statements, RightCurly)) -->
     left_curly(LeftCurly), stmts(Statements), right_curly(RightCurly).     
 
+/*** 
+	Parses statements(stmts)
+	stmts = [ assign , stmts ] ;
+***/
 stmts(statements) -->
     [].
 stmts(statements(Assign, Statements)) -->
     assign(Assign), stmts(Statements).
 
-assign(assignment(ID, Assign, Expression, SemiColon)) -->
-    id(ID), assign_op(Assign), expr(Expression), semicolon(SemiColon).
+/*** 
+	Parses an assignment(assign)
+	assign = id , '=' , expr , ';' ;
+***/
+assign(assignment(Identifier, Assign, Expression, SemiColon)) -->
+    id(Identifier), assign_op(Assign), expr(Expression), semicolon(SemiColon).
 
+/*** 
+	Parses an expression(expr)
+	expr = term , [ ( '+' | '-' ) , expr ] ;
+***/
 expr(expression(Term, AddOp, Expression)) --> 
     term(Term), add_op(AddOp), expr(Expression).
 expr(expression(Term, SubOp, Expression)) --> 
@@ -113,6 +140,10 @@ expr(expression(Term, SubOp, Expression)) -->
 expr(expression(Term)) -->
 	term(Term).
 
+/*** 
+	Parses a term
+	term = factor , [ ( '*' | '/' ) , term ] ;
+***/
 term(term(Factor, MulOp, Term)) -->
     factor(Factor), mult_op(MulOp), term(Term).
 term(term(Factor, DivOp, Term)) -->
@@ -120,19 +151,34 @@ term(term(Factor, DivOp, Term)) -->
 term(term(Factor)) -->
 	factor(Factor).
 
-
-factor(factor(I)) -->
-    int(I).
-factor(factor(ID)) --> 
-    id(ID).
+/*** 
+	Parses a factor
+	factor = int | id | '(' , expr , ')' ;
+***/
+factor(factor(Integer)) -->
+    int(Integer).
+factor(factor(Identifier)) --> 
+    id(Identifier).
 factor(factor(LeftParen, Expression, RightParen)) -->
     left_paren(LeftParen), expr(Expression), right_paren(RightParen).
 
-int(int(I)) --> 
-    [I], {number(I)}.
-id(ident(ID)) --> 
-    [ID], {atom(ID)}.
+/***
+	Parses an int
+	Uses the built in 'number' which allows floating point numbers
+***/
+int(int(Integer)) --> 
+    [Integer], {number(Integer)}.
 
+/***
+	Parses an id
+	Uses the built in 'atom'
+***/
+id(ident(Identifier)) --> 
+    [Identifier], {atom(Identifier)}.
+
+/***
+	Table for putting the correct words of symbols in the parse tree
+***/
 left_curly(left_curly) --> ['{'].
 right_curly(right_curly) --> ['}'].
 left_paren(left_paren) --> ['('].
@@ -150,5 +196,3 @@ evaluate(+ParseTree,+VariablesIn,-VariablesOut):-
 	after evaluation as a list of variables and their values in 
 	the form [var = value, ...].
 ***/
-
-/* EVALUATOR TO BE WRITTEN FOR ASSIGNMENT3 */
