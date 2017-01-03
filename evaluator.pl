@@ -1,4 +1,4 @@
-evaluate(block(left_curly, Statements, right_curly), VariablesIn, VariablesOut):-
+/*evaluate(block(left_curly, Statements, right_curly), VariablesIn, VariablesOut):-
 		evaluate(Statements, VariablesIn, VariablesOut).
 
 evaluate(statements, VariablesIn, VariablesOut):-
@@ -61,4 +61,5 @@ evaluate(ident(ID), VariablesIn, VariablesOut):-
 		member(ID=X,VariablesIn),
 		evaluate(int(X), VariablesIn, VariablesOut).
 evaluate(ident(ID), _, VariablesOut):- VariablesOut = ID.
-evaluate(int(Int), _, VariablesOut):- VariablesOut is Int.
+evaluate(int(Int), _, VariablesOut):- VariablesOut is Int.*/
+
